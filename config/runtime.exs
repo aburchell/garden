@@ -21,6 +21,8 @@ if System.get_env("PHX_SERVER") do
 end
 
 config :garden, GardenWeb.Endpoint,
+  http: [port: String.to_integer(System.get_env("PORT"))],
+  url: [host: "everywhere.garden"],
   https: [port: 443]
 
 if config_env() == :prod do
