@@ -21,9 +21,9 @@ if System.get_env("PHX_SERVER") do
 end
 
 config :garden, GardenWeb.Endpoint,
-  http: [port: String.to_integer(System.get_env("PORT", "4000"))],
-  url: [host: "everywhere.garden"],
-  https: [port: 443]
+  http: [port: String.to_integer(System.get_env("PORT", "4000"))]
+  # https: [port: 443]
+  # url: [host: "everywhere.garden"]
 
 if config_env() == :prod do
   database_url =
@@ -36,7 +36,7 @@ if config_env() == :prod do
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
   config :garden, Garden.Repo,
-    ssl: true,
+    # ssl: true,
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     # For machines with several cores, consider starting multiple pools of `pool_size`
@@ -55,12 +55,13 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  host = System.get_env("PHX_HOST") || "example.com"
+  host = System.get_env("PHX_HOST") || "everywhere.garden"
 
   config :garden, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :garden, GardenWeb.Endpoint,
-    url: [host: host, port: 443, scheme: "https"],
+    url: [host: host, port: 4000, scheme: "http"],
+    # url: [host: host, port: 443, scheme: "https"],
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
