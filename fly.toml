@@ -1,0 +1,40 @@
+# fly.toml app configuration file generated for garden-still-water-1127 on 2026-03-03T00:02:38-05:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'garden-still-water-1127'
+primary_region = 'ewr'
+kill_signal = 'SIGTERM'
+
+[build]
+
+[deploy]
+  release_command = '/app/bin/migrate'
+
+[env]
+  PHX_HOST = 'garden-still-water-1127.fly.dev'
+  PORT = '8080'
+  DATABASE_PATH = "/mnt/gardenbase/production.sqlite"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 1000
+
+[mounts]
+  source="gardenbase"
+  destination="/mnt/gardenbase"
+
+[[vm]]
+  memory = '1gb'
+  cpus = 1
+  memory_mb = 1024

@@ -7,6 +7,7 @@ defmodule Garden.Application do
 
   @impl true
   def start(_type, _args) do
+    Garden.Release.migrate()
     children = [
       GardenWeb.Telemetry,
       Garden.Repo,

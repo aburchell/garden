@@ -21,23 +21,22 @@ if System.get_env("PHX_SERVER") do
 end
 
 config :garden, GardenWeb.Endpoint,
-  http: [port: String.to_integer(System.get_env("PORT", "4000"))]
+  http: [port: String.to_integer(System.get_env("PORT", "8080"))]
   # https: [port: 443]
   # url: [host: "everywhere.garden"]
 
 if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
-      """
+  # database_path =
+  #   System.get_env("DATABASE_PATH") ||
+  #     raise """
+  #     environment variable DATABASE_PATH is missing.
+  #     """
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
   config :garden, Garden.Repo,
     # ssl: true,
-    url: database_url,
+    database: "/mnt/gardenbase/production.sqlite",
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     # For machines with several cores, consider starting multiple pools of `pool_size`
     # pool_count: 4,
@@ -60,7 +59,7 @@ if config_env() == :prod do
   config :garden, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :garden, GardenWeb.Endpoint,
-    url: [host: host, port: 4000, scheme: "http"],
+    url: [host: host, port: 8080, scheme: "http"],
     # url: [host: host, port: 443, scheme: "https"],
     http: [
       # Enable IPv6 and bind on all interfaces.
